@@ -2,23 +2,23 @@ import { useEffect, useRef, useState } from 'react';
 
 import {
   autoCorrelate,
-  frequencyToNote,
   centsOffFromNote,
+  frequencyToNote,
 } from '../audio/pitchDetection';
 
 export default function useMicrophonePitch() {
-  const [isListening, setIsListening] = useState(false);
-  const [frequency, setFrequency] = useState(null);
-  const [note, setNote] = useState('--');
-  const [centsOff, setCentsOff] = useState(0);
-  const [volume, setVolume] = useState(0);
+  const [isListening, setIsListening] = useState<boolean>(false);
+  const [frequency, setFrequency] = useState<number | null>(null);
+  const [note, setNote] = useState<string>('--');
+  const [centsOff, setCentsOff] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(0);
 
-  const audioContextRef = useRef(null);
-  const analyserRef = useRef(null);
-  const streamRef = useRef(null);
-  const animationRef = useRef(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const animationRef = useRef<number | null>(null);
 
-  async function startListening() {
+  async function startListening(): Promise<void> {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
     });
@@ -28,9 +28,7 @@ export default function useMicrophonePitch() {
 
     analyser.fftSize = 2048;
 
-    const source =
-      audioContext.createMediaStreamSource(stream);
-
+    const source = audioContext.createMediaStreamSource(stream);
     source.connect(analyser);
 
     audioContextRef.current = audioContext;
@@ -42,20 +40,23 @@ export default function useMicrophonePitch() {
     analyse();
   }
 
-  function stopListening() {
-    if (animationRef.current) {
+  function stopListening(): void {
+    if (animationRef.current !== null) {
       cancelAnimationFrame(animationRef.current);
     }
 
     if (streamRef.current) {
-      streamRef.current
-        .getTracks()
-        .forEach((track) => track.stop());
+      streamRef.current.getTracks().forEach((track) => track.stop());
     }
 
     if (audioContextRef.current) {
       audioContextRef.current.close();
     }
+
+    audioContextRef.current = null;
+    analyserRef.current = null;
+    streamRef.current = null;
+    animationRef.current = null;
 
     setIsListening(false);
     setFrequency(null);
@@ -64,24 +65,20 @@ export default function useMicrophonePitch() {
     setVolume(0);
   }
 
-  function analyse() {
+  function analyse(): void {
     const analyser = analyserRef.current;
     const audioContext = audioContextRef.current;
 
     if (!analyser || !audioContext) return;
 
     const buffer = new Float32Array(analyser.fftSize);
-
     analyser.getFloatTimeDomainData(buffer);
 
-    const detectedFrequency = autoCorrelate(
-      buffer,
-      audioContext.sampleRate
-    );
+    const detectedFrequency = autoCorrelate(buffer, audioContext.sampleRate);
 
     let rms = 0;
 
-    for (let i = 0; i < buffer.length; i++) {
+    for (let i = 0; i < buffer.length; i += 1) {
       rms += buffer[i] * buffer[i];
     }
 
@@ -95,8 +92,7 @@ export default function useMicrophonePitch() {
       setCentsOff(centsOffFromNote(detectedFrequency));
     }
 
-    animationRef.current =
-      requestAnimationFrame(analyse);
+    animationRef.current = requestAnimationFrame(analyse);
   }
 
   useEffect(() => {
