@@ -11,6 +11,9 @@ import useAudioPlayer from '../hooks/useAudioPlayer';
 import {
   generateMockTimeline,
   getCurrentTimelineNote,
+} from '../audio/noteTimeline';
+
+import type {
   TimelineNote,
 } from '../audio/noteTimeline';
 
