@@ -1,29 +1,37 @@
 .transport {
-    display: flex;
-  
-    gap: 8px;
-  
-    margin-bottom: 12px;
-  }
-  
-  .transport-button {
-    flex: 1;
-  
-    background: #11111a;
-  
-    border: 1px solid #242637;
-  
-    border-radius: 14px;
-  
-    padding: 12px;
-  
-    color: #18d8f0;
-  
-    font-weight: 900;
-  
-    cursor: pointer;
-  }
-  
-  .transport-button:hover {
-    opacity: 0.9;
-  }
+  display: flex;
+
+  gap: 8px;
+
+  margin-bottom: 12px;
+}
+
+.transport-button {
+  flex: 1;
+
+  background: #11111a;
+
+  border: 1px solid #242637;
+
+  border-radius: 14px;
+
+  padding: 12px;
+
+  color: #18d8f0;
+
+  font-weight: 900;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.transport-button:hover {
+  opacity: 0.9;
+}
+
+.transport-button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}

@@ -2,6 +2,7 @@ import './TransportControls.css';
 
 type TransportControlsProps = {
   isPlaying: boolean;
+  disabled?: boolean;
   onPlayPause: () => void;
   onStop: () => void;
   onSkipBack: () => void;
@@ -10,6 +11,7 @@ type TransportControlsProps = {
 
 export default function TransportControls({
   isPlaying,
+  disabled = false,
   onPlayPause,
   onStop,
   onSkipBack,
@@ -17,19 +19,35 @@ export default function TransportControls({
 }: TransportControlsProps) {
   return (
     <div className="transport">
-      <button className="transport-button" onClick={onSkipBack}>
+      <button
+        className="transport-button"
+        onClick={onSkipBack}
+        disabled={disabled}
+      >
         -5s
       </button>
 
-      <button className="transport-button" onClick={onPlayPause}>
+      <button
+        className="transport-button"
+        onClick={onPlayPause}
+        disabled={disabled}
+      >
         {isPlaying ? 'Pause' : 'Play'}
       </button>
 
-      <button className="transport-button" onClick={onStop}>
+      <button
+        className="transport-button"
+        onClick={onStop}
+        disabled={disabled}
+      >
         Stop
       </button>
 
-      <button className="transport-button" onClick={onSkipForward}>
+      <button
+        className="transport-button"
+        onClick={onSkipForward}
+        disabled={disabled}
+      >
         +5s
       </button>
     </div>
