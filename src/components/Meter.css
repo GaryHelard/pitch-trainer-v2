@@ -1,0 +1,39 @@
+.meter-wrap {
+    margin-bottom: 18px;
+  }
+  
+  .meter-header {
+    display: flex;
+  
+    justify-content: space-between;
+  
+    margin-bottom: 8px;
+  }
+  
+  .meter-label {
+    color: #cbd3e6;
+  
+    font-weight: 800;
+  }
+  
+  .meter-value {
+    color: #18d8f0;
+  
+    font-weight: 900;
+  }
+  
+  .meter-track {
+    height: 14px;
+  
+    background: #171926;
+  
+    border-radius: 8px;
+  
+    overflow: hidden;
+  }
+  
+  .meter-fill {
+    height: 14px;
+  
+    background: #18d8f0;
+  }
